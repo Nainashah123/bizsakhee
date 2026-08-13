@@ -58,11 +58,14 @@ create table public.tags (
   workspace_id uuid not null references public.workspaces (id) on delete cascade,
   name text not null check (char_length(btrim(name)) between 1 and 40),
   color text not null default 'plum',
-  created_at timestamptz not null default now(),
-  unique (workspace_id, lower(name))
+  created_at timestamptz not null default now()
 );
 
 create index tags_workspace_idx on public.tags (workspace_id);
+-- A table constraint cannot hold an expression, so case-insensitive uniqueness
+-- is expressed as a unique index instead.
+create unique index tags_workspace_name_key
+  on public.tags (workspace_id, lower(name));
 
 create table public.contact_tags (
   workspace_id uuid not null references public.workspaces (id) on delete cascade,

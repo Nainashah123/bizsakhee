@@ -94,11 +94,12 @@ create table public.message_templates (
   is_active boolean not null default true,
   created_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  unique (workspace_id, lower(name))
+  updated_at timestamptz not null default now()
 );
 
 create index message_templates_workspace_idx on public.message_templates (workspace_id);
+create unique index message_templates_workspace_name_key
+  on public.message_templates (workspace_id, lower(name));
 
 create trigger conversations_set_updated_at before update on public.conversations
   for each row execute function public.set_updated_at();
