@@ -36,18 +36,33 @@ Supabase project, so nothing here is verified.
 - [~] Migrations: SaaS operations (atomic `consume_usage`)
 - [~] RLS policies + non-recursive security helper functions
 - [~] Storage buckets and policies
+- [~] Workspace defaults trigger + slug allocation function
 - [ ] Applied successfully against Postgres (`supabase db reset`)
-- [ ] Generated database types
+- [~] Database types (hand-written to match the migrations; replaced by
+      `pnpm db:types` once a database exists)
 - [ ] Seed data (development only)
 - [ ] Tenant isolation tests
 
 ## Stage 3 — Authentication and onboarding
 
-- [ ] Sign up / sign in / magic link / verify / forgot / reset / sign out
-- [ ] Safe redirect allowlist
-- [ ] Onboarding wizard and workspace creation
-- [ ] Default pipeline creation, optional demo data
-- [ ] Role-aware server guards
+Code complete and passing the quality gate. Behaviour against a live Supabase
+project is still unverified (no database yet).
+
+- [x] Sign up, sign in, magic link, email confirmation callback, forgot and
+      reset password, sign out
+- [x] Safe redirect allowlist (`lib/auth/redirect.ts`) + 6 tests
+- [x] Generic auth errors and per-email/IP rate limiting
+- [x] Onboarding wizard (3 steps) creating workspace, membership, business
+      profile, default pipeline and stages
+- [x] Optional demo data, only on explicit opt-in
+- [x] Role-aware server guards (`requireWorkspace`, `requireCapability`)
+- [x] Central role/capability matrix + 8 tests
+- [x] Dashboard shell: sidebar, mobile bottom nav, user menu, skip link
+- [x] Overview page reading live workspace metrics, with empty state
+- [x] Settings page (workspace + business + profile), admin-gated
+- [x] Error boundary, not-found page, dashboard loading skeleton
+- [x] `/api/health` configuration probe
+- [ ] Verified end to end against a live Supabase project
 
 ## Stage 4 — Core business system
 
