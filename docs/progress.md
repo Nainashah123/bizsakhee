@@ -17,20 +17,26 @@ Legend: `[x]` done and verified · `[~]` in progress · `[ ]` not started
 - [x] Session proxy with dashboard route protection (`proxy.ts`)
 - [x] Structured logger and typed `Result`
 - [x] Prettier, ESLint, Vitest, Playwright configuration
-- [ ] Marketing + auth + dashboard base layouts
-- [ ] Stage 1 quality gate green
+- [x] Root layout, marketing shell, homepage
+- [x] Stage 1 quality gate green (format, lint, typecheck, 11 tests, build)
+- [ ] Auth and dashboard shells (Stage 3)
 
 ## Stage 2 — Database and security
 
-- [ ] Migrations: identity and tenancy
-- [ ] Migrations: CRM
-- [ ] Migrations: commerce
-- [ ] Migrations: communication
-- [ ] Migrations: AI and content
-- [ ] Migrations: integrations
-- [ ] Migrations: SaaS operations
-- [ ] RLS policies + security helper functions
-- [ ] Storage buckets and policies
+Migrations below are **written but not yet applied** — no Docker and no linked
+Supabase project, so nothing here is verified.
+
+- [~] Migrations: extensions, enums, tenancy helpers
+- [~] Migrations: identity and tenancy
+- [~] Migrations: CRM
+- [~] Migrations: commerce (server-side order numbering, derived payment status)
+- [~] Migrations: communication
+- [~] Migrations: AI and content
+- [~] Migrations: integrations and webhook events
+- [~] Migrations: SaaS operations (atomic `consume_usage`)
+- [~] RLS policies + non-recursive security helper functions
+- [~] Storage buckets and policies
+- [ ] Applied successfully against Postgres (`supabase db reset`)
 - [ ] Generated database types
 - [ ] Seed data (development only)
 - [ ] Tenant isolation tests
