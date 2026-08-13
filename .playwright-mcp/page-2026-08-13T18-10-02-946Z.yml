@@ -1,0 +1,36 @@
+- generic [active] [ref=e1]:
+    - generic [ref=e2]:
+        - banner [ref=e3]:
+            - link "BizSakhi BizSakhi" [ref=e4] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e5]:
+                    - generic [ref=e9]: BizSakhi
+                    - generic [ref=e10]: BizSakhi
+        - main [ref=e11]:
+            - generic [ref=e13]:
+                - generic [ref=e14]:
+                    - generic [ref=e15]: Welcome back
+                    - paragraph [ref=e16]: Sign in to pick up where you left off.
+                - generic [ref=e17]:
+                    - generic [ref=e18]:
+                        - tablist [ref=e19]:
+                            - tab "Password" [selected] [ref=e20]
+                            - tab "Email link" [ref=e21]
+                        - tabpanel "Password" [ref=e22]:
+                            - generic [ref=e23]:
+                                - generic [ref=e24]:
+                                    - generic [ref=e25]: Email
+                                    - textbox "Email" [ref=e26]
+                                - generic [ref=e27]:
+                                    - generic [ref=e28]:
+                                        - generic [ref=e29]: Password
+                                        - link "Forgot password?" [ref=e30] [cursor=pointer]:
+                                            - /url: /forgot-password
+                                    - textbox "Password" [ref=e31]
+                                - button "Sign in" [ref=e32]
+                    - paragraph [ref=e33]:
+                        - text: New to BizSakhi?
+                        - link "Create a free workspace" [ref=e34] [cursor=pointer]:
+                            - /url: /signup
+    - region "Notifications alt+T"
+    - button "Open Next.js Dev Tools" [ref=e40] [cursor=pointer]

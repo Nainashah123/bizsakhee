@@ -4,13 +4,17 @@ import { redirect } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import { OnboardingForm } from "@/components/onboarding/onboarding-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SupabaseSetupRequired } from "@/components/setup/setup-required";
 import { getSessionContext } from "@/lib/auth/session";
+import { isSupabaseConfigured } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "Set up your workspace",
 };
 
 export default async function OnboardingPage() {
+  if (!isSupabaseConfigured()) return <SupabaseSetupRequired />;
+
   const context = await getSessionContext();
   if (!context) redirect("/login");
   if (context.workspace) redirect("/dashboard");

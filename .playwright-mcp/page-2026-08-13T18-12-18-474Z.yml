@@ -1,0 +1,52 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e7]: BizSakhi
+      - generic [ref=f1e8]: BizSakhi
+    - generic [ref=f1e9]:
+      - generic [ref=f1e15]:
+        - generic [ref=f1e16]: "Setup required: connect a Supabase project"
+        - paragraph [ref=f1e17]: Accounts, sign-in and every piece of your data live in Supabase. Until a project is connected there is nothing to sign in to - this is a configuration state, not an error.
+      - generic [ref=f1e18]:
+        - list [ref=f1e19]:
+          - listitem [ref=f1e20]:
+            - generic [ref=f1e21]: "1"
+            - generic [ref=f1e22]:
+              - paragraph [ref=f1e23]:
+                - text: Create a Supabase project
+                - generic [ref=f1e24]: (not done)
+              - paragraph [ref=f1e25]: supabase.com/dashboard - free tier is enough to start
+          - listitem [ref=f1e26]:
+            - generic [ref=f1e27]: "2"
+            - generic [ref=f1e28]:
+              - paragraph [ref=f1e29]:
+                - text: Copy .env.example to .env.local
+                - generic [ref=f1e30]: (not done)
+              - paragraph [ref=f1e31]: cp .env.example .env.local
+          - listitem [ref=f1e32]:
+            - generic [ref=f1e33]: "3"
+            - generic [ref=f1e34]:
+              - paragraph [ref=f1e35]:
+                - text: Fill in the project URL and publishable key
+                - generic [ref=f1e36]: (not done)
+              - paragraph [ref=f1e37]: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY
+          - listitem [ref=f1e38]:
+            - generic [ref=f1e39]: "4"
+            - generic [ref=f1e40]:
+              - paragraph [ref=f1e41]:
+                - text: Apply the database migrations
+                - generic [ref=f1e42]: (not done)
+              - paragraph [ref=f1e43]: pnpm exec supabase link, then pnpm exec supabase db push
+          - listitem [ref=f1e44]:
+            - generic [ref=f1e45]: "5"
+            - generic [ref=f1e46]:
+              - paragraph [ref=f1e47]:
+                - text: Restart the dev server
+                - generic [ref=f1e48]: (not done)
+              - paragraph [ref=f1e49]: pnpm dev
+        - paragraph [ref=f1e50]:
+          - text: "Full instructions:"
+          - code [ref=f1e55]: docs/deployment.md
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f1e61] [cursor=pointer]
+  - alert [ref=f1e65]

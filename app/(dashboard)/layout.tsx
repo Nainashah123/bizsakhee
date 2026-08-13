@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { BottomNav, SidebarNav } from "@/components/dashboard/dashboard-nav";
 import { UserMenu } from "@/components/dashboard/user-menu";
+import { SupabaseSetupRequired } from "@/components/setup/setup-required";
+import { isSupabaseConfigured } from "@/lib/env";
 import { requireWorkspace } from "@/lib/auth/session";
 import { ROLE_LABELS } from "@/lib/permissions";
 
@@ -11,6 +13,8 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (!isSupabaseConfigured()) return <SupabaseSetupRequired />;
+
   const { user, workspace } = await requireWorkspace();
   const name = (user.user_metadata?.full_name as string | undefined) ?? "";
 

@@ -75,6 +75,19 @@ const rawClientEnv = {
 
 let cachedClientEnv: ClientEnv | undefined;
 
+/**
+ * Whether Supabase is configured at all.
+ *
+ * Callers use this to render an explicit "Setup required" screen instead of
+ * letting `clientEnv()` throw and turn a missing credential into a 500.
+ */
+export function isSupabaseConfigured(): boolean {
+  return Boolean(
+    rawClientEnv.NEXT_PUBLIC_SUPABASE_URL &&
+    rawClientEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  );
+}
+
 export function clientEnv(): ClientEnv {
   if (cachedClientEnv) return cachedClientEnv;
   const parsed = clientSchema.safeParse(rawClientEnv);

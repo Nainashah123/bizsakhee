@@ -51,7 +51,6 @@ this behaviour.
 `lib/supabase/database.types.ts`, then write the cross-workspace isolation
 tests before starting Stage 3 (authentication and onboarding).
 
-
 ---
 
 ## Iteration 1 — manual
@@ -70,12 +69,12 @@ files.
 
 **Commands executed and actual results.**
 
-| Command | Result |
-| --- | --- |
-| `pnpm test` | pass — 34 tests, 4 files |
-| `pnpm lint` | pass |
-| `pnpm typecheck` | pass |
-| `pnpm build` | pass — 11 routes |
+| Command          | Result                   |
+| ---------------- | ------------------------ |
+| `pnpm test`      | pass — 34 tests, 4 files |
+| `pnpm lint`      | pass                     |
+| `pnpm typecheck` | pass                     |
+| `pnpm build`     | pass — 11 routes         |
 
 **Decisions worth recording.**
 

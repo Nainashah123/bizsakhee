@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-import { absoluteUrl } from "@/lib/env";
+import { absoluteUrl, isSupabaseConfigured } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { safeRedirect } from "@/lib/auth/redirect";
 import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
@@ -23,6 +23,11 @@ export type AuthState = {
   error?: string;
   fieldErrors?: Record<string, string[]>;
   message?: string;
+};
+
+const NOT_CONFIGURED: AuthState = {
+  error:
+    "This installation is not connected to Supabase yet, so accounts do not exist. See docs/deployment.md.",
 };
 
 const GENERIC_CREDENTIALS_ERROR =
@@ -48,6 +53,8 @@ export async function signUpAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
   const parsed = parseFormData(signUpSchema, formData);
   if (!parsed.ok) return toState(parsed);
 
@@ -93,6 +100,8 @@ export async function signInAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
   const parsed = parseFormData(signInSchema, formData);
   if (!parsed.ok) return toState(parsed);
 
@@ -124,6 +133,8 @@ export async function magicLinkAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
   const parsed = parseFormData(magicLinkSchema, formData);
   if (!parsed.ok) return toState(parsed);
 
@@ -163,6 +174,8 @@ export async function forgotPasswordAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
   const parsed = parseFormData(forgotPasswordSchema, formData);
   if (!parsed.ok) return toState(parsed);
 
@@ -196,6 +209,8 @@ export async function resetPasswordAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
+
   const parsed = parseFormData(resetPasswordSchema, formData);
   if (!parsed.ok) return toState(parsed);
 

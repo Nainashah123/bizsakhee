@@ -39,7 +39,7 @@ Supabase project, so nothing here is verified.
 - [~] Workspace defaults trigger + slug allocation function
 - [ ] Applied successfully against Postgres (`supabase db reset`)
 - [~] Database types (hand-written to match the migrations; replaced by
-      `pnpm db:types` once a database exists)
+  `pnpm db:types` once a database exists)
 - [ ] Seed data (development only)
 - [ ] Tenant isolation tests
 
