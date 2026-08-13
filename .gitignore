@@ -53,3 +53,6 @@ next-env.d.ts
 /supabase/.branches
 /supabase/.temp
 .remember/
+
+# playwright mcp session artifacts
+.playwright-mcp/
