@@ -205,20 +205,27 @@ describe("contentOutputSchema", () => {
     expect(contentOutputSchema.parse(valid)).toEqual(valid);
   });
 
-  it("documents that the regex rejects Indic combining marks", () => {
-    // `\p{L}\p{N}` does not include `\p{M}`, so a vowel sign (मात्रा) or nukta
-    // fails the check - "#साड़ी" is rejected even though it is a perfectly
-    // ordinary Hindi hashtag. Asserted here so the limitation is visible rather
-    // than discovered by a seller writing in Hindi. Widening the pattern is a
-    // change to the committed contract in `lib/ai/schemas.ts`.
-    const result = contentOutputSchema.safeParse({
+  it("accepts Indic hashtags built from combining marks", () => {
+    // Devanagari syllables are a base letter plus combining marks: "#साड़ी" is
+    // स + ा + ड + ़ + ी, where ा and ी are \p{M}, not \p{L}. A pattern of
+    // \p{L}\p{N} alone rejects these, which would fail the entire generation
+    // for a seller writing in Hindi.
+    const withIndic = {
       ...valid,
-      hashtags: ["#साड़ी"],
-    });
+      hashtags: ["#साड़ी", "#कपड़ा", "#गहने"],
+    };
 
-    expect(result.success).toBe(false);
-    if (result.success) return;
-    expect(paths(result.error.issues)).toEqual(["hashtags.0"]);
+    expect(contentOutputSchema.parse(withIndic)).toEqual(withIndic);
+  });
+
+  it("still rejects hashtags that are not hashtags", () => {
+    for (const bad of ["#has space", "no-hash", "#", "# leading"]) {
+      const result = contentOutputSchema.safeParse({
+        ...valid,
+        hashtags: [bad],
+      });
+      expect(result.success, `expected ${bad} to be rejected`).toBe(false);
+    }
   });
 
   it("REJECTS a response that is missing the caption", () => {

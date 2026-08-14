@@ -146,8 +146,13 @@ export const contentOutputSchema = z.object({
       z
         .string()
         .trim()
+        // \p{M} matters: Devanagari and other Indic scripts build syllables
+        // from a base letter plus combining marks, so "#साड़ी" is स + ा + ड +
+        // ़ + ी. Without \p{M} every hashtag with a matra or nukta is
+        // rejected and the whole generation fails - for precisely the sellers
+        // this product is built for.
         .regex(
-          /^#[\p{L}\p{N}_]+$/u,
+          /^#[\p{L}\p{M}\p{N}_]+$/u,
           "Hashtags must start with # and have no spaces",
         ),
     )
