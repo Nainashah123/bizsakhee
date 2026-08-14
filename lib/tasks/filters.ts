@@ -192,10 +192,26 @@ export function zonedTimeToUtc(
   );
 
   const guessOffset = zoneOffsetMs(new Date(naive), zone);
-  let timestamp = naive - guessOffset;
-  const actualOffset = zoneOffsetMs(new Date(timestamp), zone);
-  if (actualOffset !== guessOffset) timestamp = naive - actualOffset;
-  return new Date(timestamp);
+  const firstGuess = naive - guessOffset;
+
+  const actualOffset = zoneOffsetMs(new Date(firstGuess), zone);
+  if (actualOffset === guessOffset) return new Date(firstGuess);
+
+  // The offset changed between the naive timestamp and the first guess, so the
+  // request sits next to a DST transition. Re-derive with the corrected offset,
+  // then check that the result actually reads back as the wall clock we were
+  // asked for.
+  const corrected = naive - actualOffset;
+  if (zoneOffsetMs(new Date(corrected), zone) === actualOffset) {
+    return new Date(corrected);
+  }
+
+  // Neither offset round-trips: the requested wall clock is inside a
+  // spring-forward gap and never occurs. Without this branch the correction
+  // overshoots back past the transition and 02:30 would silently resolve to
+  // 01:30 - indistinguishable from a time the user could have picked on
+  // purpose. The first guess is the instant the clock jumps to.
+  return new Date(firstGuess);
 }
 
 /** Midnight that opens the calendar day `instant` falls on, in `timeZone`. */
