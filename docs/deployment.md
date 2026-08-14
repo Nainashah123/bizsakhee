@@ -198,7 +198,16 @@ permissions. That is a human process and cannot be automated.
 openssl rand -hex 32           # -> CRON_SECRET
 ```
 
-`vercel.json` declares the schedule. Vercel sends the secret as a bearer token;
+`vercel.json` declares the schedule. It runs once a day at 01:30 UTC, which is
+07:00 in Asia/Kolkata - a reminder lands before the working day rather than in
+the middle of the night.
+
+**Daily is a Hobby-plan constraint, not a product decision.** Vercel's Hobby
+tier rejects any cron that fires more than once a day, so a deploy with an
+hourly schedule fails outright. On Pro, change the schedule to `0 * * * *`:
+the endpoint looks for tasks due within the next 24 hours and stamps
+`reminder_sent_at`, so running it hourly delivers reminders closer to their
+due time and re-running it never duplicates anything. Vercel sends the secret as a bearer token;
 the endpoint compares it with a timing-safe comparison and refuses to run
 unauthenticated. If `CRON_SECRET` is absent the endpoint returns 503 rather
 than running open.
