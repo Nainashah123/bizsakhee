@@ -31,6 +31,26 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Overview", icon: BarChart3, primary: true },
   {
+    href: "/dashboard/contacts",
+    label: "Customers",
+    icon: Users,
+    primary: true,
+  },
+  {
+    href: "/dashboard/tasks",
+    label: "Follow-ups",
+    icon: ListTodo,
+    primary: true,
+  },
+  { href: "/dashboard/orders", label: "Orders", icon: Receipt, primary: true },
+  { href: "/dashboard/pipeline", label: "Pipeline", icon: KanbanSquare },
+  {
+    href: "/dashboard/products",
+    label: "Products",
+    icon: Package,
+    capability: "products.write",
+  },
+  {
     href: "/dashboard/settings",
     label: "Settings",
     icon: Settings,
@@ -40,16 +60,6 @@ export const NAV_ITEMS: NavItem[] = [
 
 /** Modules landing in later stages, listed here so the plan stays visible. */
 export const PLANNED_NAV_ITEMS: NavItem[] = [
-  { href: "/dashboard/contacts", label: "Customers", icon: Users },
-  { href: "/dashboard/pipeline", label: "Pipeline", icon: KanbanSquare },
-  { href: "/dashboard/tasks", label: "Follow-ups", icon: ListTodo },
-  {
-    href: "/dashboard/products",
-    label: "Products",
-    icon: Package,
-    capability: "products.write",
-  },
-  { href: "/dashboard/orders", label: "Orders", icon: Receipt },
   {
     href: "/dashboard/ai",
     label: "AI helper",

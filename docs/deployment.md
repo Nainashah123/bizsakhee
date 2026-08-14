@@ -41,11 +41,11 @@ It reports `true`/`false` per integration and never echoes a value.
 
 Project Settings → **API Keys**:
 
-| Dashboard value | Environment variable | Exposure |
-| --- | --- | --- |
-| Project URL | `NEXT_PUBLIC_SUPABASE_URL` | browser |
-| `anon` / publishable | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | browser — safe, RLS protects data |
-| `service_role` / secret | `SUPABASE_SECRET_KEY` | **server only — bypasses RLS** |
+| Dashboard value         | Environment variable                   | Exposure                          |
+| ----------------------- | -------------------------------------- | --------------------------------- |
+| Project URL             | `NEXT_PUBLIC_SUPABASE_URL`             | browser                           |
+| `anon` / publishable    | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | browser — safe, RLS protects data |
+| `service_role` / secret | `SUPABASE_SECRET_KEY`                  | **server only — bypasses RLS**    |
 
 Never give the secret key a `NEXT_PUBLIC_` prefix and never import it into a
 Client Component. It is used only by webhooks and cron routes through
@@ -135,6 +135,7 @@ Not required to run the app; billing shows a setup state until configured.
    - `STRIPE_PRO_MONTHLY_PRICE_ID`, `STRIPE_PRO_ANNUAL_PRICE_ID`
 
    Price ids are account-specific and are never hardcoded in the repository.
+
 3. Webhooks. Locally:
 
    ```bash
