@@ -23,7 +23,9 @@ export default async function LoginPage({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
+        <CardTitle asChild className="text-2xl">
+          <h1>Welcome back</h1>
+        </CardTitle>
         <p className="text-sm text-muted-foreground">
           Sign in to pick up where you left off.
         </p>

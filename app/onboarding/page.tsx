@@ -29,7 +29,9 @@ export default async function OnboardingPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Let&apos;s set you up</CardTitle>
+            <CardTitle asChild className="text-2xl">
+              <h1>Let&apos;s set you up</h1>
+            </CardTitle>
             <p className="text-sm text-muted-foreground">
               Three short steps. You can change any of this later in settings.
             </p>

@@ -23,7 +23,9 @@ export default async function SignUpPage({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Start free</CardTitle>
+        <CardTitle asChild className="text-2xl">
+          <h1>Start free</h1>
+        </CardTitle>
         <p className="text-sm text-muted-foreground">
           One workspace for your customers, orders and follow-ups. No card
           needed.

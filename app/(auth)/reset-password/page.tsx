@@ -20,7 +20,9 @@ export default async function ResetPasswordPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Set a new password</CardTitle>
+        <CardTitle asChild className="text-2xl">
+          <h1>Set a new password</h1>
+        </CardTitle>
         <p className="text-sm text-muted-foreground">
           Choose a password you have not used elsewhere.
         </p>

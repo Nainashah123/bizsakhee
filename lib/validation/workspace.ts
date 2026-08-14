@@ -21,13 +21,11 @@ export const workspaceSettingsSchema = z.object({
     .min(2, "Give your workspace a name")
     .max(120, "That name is too long"),
   currency: z.enum(SUPPORTED_CURRENCIES, { message: "Pick a currency" }),
+  // An unchecked switch submits nothing; .optional() is what allows the key to
+  // be absent. A union containing z.undefined() does not.
   isCataloguePublic: z
-    .union([
-      z.literal("on"),
-      z.literal("true"),
-      z.literal("false"),
-      z.undefined(),
-    ])
+    .union([z.literal("on"), z.literal("true"), z.literal("false")])
+    .optional()
     .transform((value) => value === "on" || value === "true"),
   businessName: z
     .string()

@@ -40,20 +40,43 @@ async function signIn(page: Page, account: TestUser) {
     .getByRole("textbox", { name: /^password$/i })
     .fill(account.password);
   await page.getByRole("button", { name: /sign in/i }).click();
-  await page.waitForURL(/\/(dashboard|onboarding)/);
+
+  // Sign-in lands on /dashboard, and the dashboard layout then redirects to
+  // /onboarding when the user has no workspace yet. Waiting on the URL alone
+  // catches the intermediate hop, so wait for whichever page actually settles.
+  await expect(
+    page
+      .getByRole("heading", { name: /let's set you up/i })
+      .or(page.getByRole("heading", { level: 1, name: /^hi /i })),
+  ).toBeVisible({ timeout: 30_000 });
 }
 
 async function completeOnboardingIfNeeded(page: Page) {
-  if (!page.url().includes("/onboarding")) return;
+  const heading = page.getByRole("heading", { name: /let's set you up/i });
+  if (!(await heading.isVisible().catch(() => false))) return;
 
   await page.getByLabel(/what should we call you/i).fill("Naina E2E");
-  await page.getByRole("button", { name: /continue/i }).click();
 
-  await page.getByLabel(/business name/i).fill("E2E Boutique");
-  await page.getByRole("button", { name: /continue/i }).click();
+  // Clicking before hydration is a no-op, so drive each step until the next
+  // one is actually on screen rather than assuming one click advances it.
+  const businessName = page.getByLabel(/business name/i);
+  await expect(async () => {
+    await page.getByRole("button", { name: /continue/i }).click();
+    await expect(businessName).toBeVisible();
+  }).toPass({ timeout: 20_000 });
 
-  await page.getByRole("button", { name: /finish setup/i }).click();
-  await page.waitForURL(/\/dashboard/);
+  await businessName.fill("E2E Boutique");
+
+  const finish = page.getByRole("button", { name: /finish setup/i });
+  await expect(async () => {
+    await page.getByRole("button", { name: /continue/i }).click();
+    await expect(finish).toBeVisible();
+  }).toPass({ timeout: 20_000 });
+
+  await finish.click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: /^hi /i }),
+  ).toBeVisible({ timeout: 30_000 });
 }
 
 test.describe.configure({ mode: "serial" });
@@ -91,7 +114,22 @@ test.describe("the core journey", () => {
       .last()
       .click();
 
-    await expect(page.getByText("Meera Nair").first()).toBeVisible();
+    // Assert the row's link, not bare text: the WhatsApp action carries the
+    // same name in its accessible label, and that node is not the one a
+    // seller sees in the list.
+    await expect(
+      page.getByRole("link", { name: "Meera Nair", exact: true }).first(),
+    ).toBeVisible();
+
+    // The number the seller typed unformatted is stored normalised. Asserted
+    // through the WhatsApp link rather than the rendered text, because the
+    // list renders both a mobile card and a desktop table and only one of them
+    // is visible at any given breakpoint.
+    await expect(
+      page
+        .getByRole("link", { name: /message meera nair on whatsapp/i })
+        .first(),
+    ).toHaveAttribute("href", /wa\.me\/919876543210/);
   });
 
   test("refuses a duplicate phone number in the same workspace", async ({

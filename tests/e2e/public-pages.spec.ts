@@ -134,10 +134,18 @@ test.describe("public routes that must not leak data", () => {
   test("an unguessable invoice token reveals no invoice", async ({ page }) => {
     await page.goto("/invoice/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
+    // Fails closed either way: with the service key configured the lookup runs
+    // and the token simply does not match; without it the page says so
+    // honestly instead of guessing. Neither reveals an invoice.
+    await expect(
+      page
+        .getByRole("heading", { name: /invoice link is not valid/i })
+        .or(
+          page.getByRole("heading", { name: /could not open this invoice/i }),
+        ),
+    ).toBeVisible();
+
     const body = await page.locator("body").innerText();
-    // Either "not found", or - when SUPABASE_SECRET_KEY is absent - an honest
-    // "not available right now". Both are failing closed.
-    expect(body).toMatch(/could not|not found|not available/i);
     expect(body).not.toMatch(/₹\s?\d/);
     expect(body).not.toMatch(/order #/i);
   });

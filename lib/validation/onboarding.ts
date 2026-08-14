@@ -70,12 +70,12 @@ export const LANGUAGES = [
 ] as const;
 
 const checkbox = z
-  .union([
-    z.literal("on"),
-    z.literal("true"),
-    z.literal("false"),
-    z.undefined(),
-  ])
+  // An unchecked checkbox submits NOTHING, so the key is absent from FormData.
+  // z.union([..., z.undefined()]) does not make a key optional in Zod 4 - the
+  // field is still required and a missing key fails with "expected
+  // nonoptional". .optional() is what actually permits the absent key.
+  .union([z.literal("on"), z.literal("true"), z.literal("false")])
+  .optional()
   .transform((value) => value === "on" || value === "true");
 
 export const onboardingSchema = z.object({
