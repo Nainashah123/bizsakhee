@@ -13,6 +13,7 @@ import {
   type InvalidImportRow,
 } from "@/lib/contacts/csv";
 import { normalizeEmail, normalizePhone } from "@/lib/contacts/normalize";
+import { assertWithinLimit } from "@/lib/plans/entitlements";
 import { createClient } from "@/lib/supabase/server";
 import { parseFormData } from "@/lib/validation/form";
 import {
@@ -109,6 +110,11 @@ export async function createContactAction(
       },
     };
   }
+
+  // Plan limit, checked on the server from the plan in force - never from
+  // anything the browser sent. Existing contacts are never touched by this.
+  const withinLimit = await assertWithinLimit(workspace.id, "contacts");
+  if (!withinLimit.ok) return { error: withinLimit.error.message };
 
   const created = await createContact(
     supabase,
@@ -585,6 +591,15 @@ export async function confirmContactImportAction(
         "There is nothing left to import - every row was either invalid or already saved.",
     };
   }
+
+  // An import is still a create path, so the same plan limit applies to the
+  // whole batch rather than being bypassed a file at a time.
+  const withinLimit = await assertWithinLimit(
+    workspace.id,
+    "contacts",
+    classified.valid.length,
+  );
+  if (!withinLimit.ok) return { error: withinLimit.error.message };
 
   const supabase = await createClient();
   const result = await importContacts(

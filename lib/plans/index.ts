@@ -36,9 +36,7 @@ export type Limit = number | null;
 export type PlanLimits = Record<LimitKey, Limit>;
 
 export type PlanFeature =
-  | "automations"
-  | "channel_integrations"
-  | "priority_support";
+  "automations" | "channel_integrations" | "priority_support";
 
 export type Plan = {
   key: PlanKey;
@@ -160,7 +158,8 @@ export const ORDERED_PLANS: readonly Plan[] = [FREE, STARTER, GROWTH, PRO];
 
 export function isPlanKey(value: unknown): value is PlanKey {
   return (
-    typeof value === "string" && (PLAN_KEYS as readonly string[]).includes(value)
+    typeof value === "string" &&
+    (PLAN_KEYS as readonly string[]).includes(value)
   );
 }
 
@@ -173,13 +172,21 @@ export function limitFor(planKey: unknown, limit: LimitKey): Limit {
   return getPlan(planKey).limits[limit];
 }
 
-export function planHasFeature(planKey: unknown, feature: PlanFeature): boolean {
+export function planHasFeature(
+  planKey: unknown,
+  feature: PlanFeature,
+): boolean {
   return getPlan(planKey).features.includes(feature);
 }
 
 export type LimitCheck =
   | { allowed: true; remaining: Limit }
-  | { allowed: false; limit: number; current: number; upgradeTo: PlanKey | null };
+  | {
+      allowed: false;
+      limit: number;
+      current: number;
+      upgradeTo: PlanKey | null;
+    };
 
 /**
  * Whether one more of `limit` may be created.
@@ -222,7 +229,9 @@ export function nextPlanWithHigherLimit(
 ): PlanKey | null {
   const current = getPlan(planKey);
   const currentCap = current.limits[limit];
-  const startIndex = ORDERED_PLANS.findIndex((plan) => plan.key === current.key);
+  const startIndex = ORDERED_PLANS.findIndex(
+    (plan) => plan.key === current.key,
+  );
 
   for (const plan of ORDERED_PLANS.slice(startIndex + 1)) {
     const cap = plan.limits[limit];

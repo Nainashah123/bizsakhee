@@ -21,6 +21,7 @@ import {
 import { requireCapability } from "@/lib/auth/session";
 import { logger } from "@/lib/logger";
 import { isCurrencyCode, type CurrencyCode } from "@/lib/money";
+import { assertWithinLimit } from "@/lib/plans/entitlements";
 import {
   discardProductImageObjects,
   uploadProductImageObject,
@@ -90,6 +91,11 @@ export async function createProductAction(
       fieldErrors: parsed.error.fieldErrors,
     };
   }
+
+  // Plan limit, checked on the server from the plan in force. Being over the
+  // limit blocks new products only; the existing catalogue is left alone.
+  const withinLimit = await assertWithinLimit(workspace.id, "products");
+  if (!withinLimit.ok) return { error: withinLimit.error.message };
 
   const supabase = await createClient();
   const created = await createProduct(

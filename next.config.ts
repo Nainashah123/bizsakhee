@@ -34,6 +34,10 @@ function supabaseRemotePatterns(): NonNullable<
 }
 
 const nextConfig: NextConfig = {
+  // Some CI runners and Playwright default to the loopback IP rather than
+  // "localhost". Without this, `next dev` treats its own asset requests as
+  // cross-origin and blocks them, so pages render but never hydrate.
+  allowedDevOrigins: ["127.0.0.1"],
   images: {
     remotePatterns: supabaseRemotePatterns(),
   },

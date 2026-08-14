@@ -51,6 +51,12 @@ export const NAV_ITEMS: NavItem[] = [
     capability: "products.write",
   },
   {
+    href: "/dashboard/billing",
+    label: "Billing",
+    icon: CreditCard,
+    capability: "billing.manage",
+  },
+  {
     href: "/dashboard/settings",
     label: "Settings",
     icon: Settings,
@@ -77,12 +83,6 @@ export const PLANNED_NAV_ITEMS: NavItem[] = [
     label: "Channels",
     icon: Plug,
     capability: "integrations.manage",
-  },
-  {
-    href: "/dashboard/billing",
-    label: "Billing",
-    icon: CreditCard,
-    capability: "billing.manage",
   },
 ];
 

@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
+// Must match the origin `next dev` serves. Hitting 127.0.0.1 while the dev
+// server considers only localhost same-origin makes Next block its own
+// client chunks, so nothing hydrates and every interaction silently fails.
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 
 export default defineConfig({
   testDir: "./tests/e2e",
