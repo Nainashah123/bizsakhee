@@ -58,6 +58,12 @@ export const NAV_ITEMS: NavItem[] = [
     primary: true,
   },
   {
+    href: "/dashboard/integrations",
+    label: "Channels",
+    icon: Plug,
+    capability: "integrations.manage",
+  },
+  {
     href: "/dashboard/billing",
     label: "Billing",
     icon: CreditCard,
@@ -78,12 +84,6 @@ export const PLANNED_NAV_ITEMS: NavItem[] = [
     label: "Team",
     icon: Users,
     capability: "members.manage",
-  },
-  {
-    href: "/dashboard/integrations",
-    label: "Channels",
-    icon: Plug,
-    capability: "integrations.manage",
   },
 ];
 

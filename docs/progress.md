@@ -66,46 +66,67 @@ project is still unverified (no database yet).
 
 ## Stage 4 — Core business system
 
-- [ ] Dashboard metrics
-- [ ] Contacts
-- [ ] Pipeline
-- [ ] Tasks and reminders cron
-- [ ] Products and images
-- [ ] Public catalogue
-- [ ] Orders and payments
-- [ ] Invoices
+- [x] Dashboard metrics
+- [x] Contacts (search, filters, tags, notes, channels, CSV import/export,
+      duplicate detection on normalised phone/email, timeline)
+- [x] Pipeline with an accessible "move to stage" control, not drag-only
+- [x] Tasks, timezone-correct due buckets, CRON_SECRET-protected reminders
+- [x] Products, variants, images with validated Storage uploads
+- [x] Public catalogue at /store/[slug]; drafts never exposed
+- [x] Orders with server-computed totals and payments
+- [x] Printable invoice and token-shared public invoice
 
 ## Stage 5 — SaaS billing
 
-- [ ] Plan definitions and entitlements
-- [ ] Checkout and portal
-- [ ] Webhooks with idempotency
-- [ ] Usage counters and limit enforcement
+- [x] Plan definitions and entitlements (Free/Starter/Growth/Pro)
+- [x] Stripe Checkout and customer portal, owner-gated
+- [x] Webhooks for the six required events, signature-verified and idempotent
+- [x] Usage counters and server-side limit enforcement, incl. the CSV path
+- [x] Billing page and public /pricing, honest when Stripe is unconfigured
+- [ ] Verified against Stripe test mode (needs keys + 6 price ids)
 
 ## Stage 6 — AI tools
 
-- [ ] Provider abstraction
-- [ ] Smart Reply
-- [ ] Content Generator
-- [ ] Rate limiting, quotas, usage tracking
+- [x] Provider abstraction (anthropic | vercel-gateway | mock)
+- [x] Smart Reply and Marketing Content, Zod-validated structured output
+- [x] Rate limiting, atomic monthly quota, usage tracking
+- [x] Draft-only: nothing is sent or stored without explicit approval
+- [ ] Verified against a real provider key (mock provider covers tests)
 
 ## Stage 7 — Communication integrations
 
-- [ ] WhatsApp Cloud API foundation
-- [ ] Instagram Messaging foundation
-- [ ] Webhook verification and normalisation
-- [ ] Setup-status screens
+- [x] AES-256-GCM encryption for per-workspace tokens
+- [x] Meta webhook HMAC verification over the raw body, failing closed
+- [x] Channels screen: deployment config outranks any stored row, so a stale
+      row can never render "Connected"
+- [~] WhatsApp/Instagram adapters, OAuth and webhook routes (in progress)
+- [ ] Verified against a real Meta app (needs credentials + app review)
 
 ## Stage 8 — Production readiness
 
-- [ ] Accessibility and responsive passes
-- [ ] Security headers and CSP
-- [ ] Test suite complete
-- [ ] `docs/deployment.md`
-- [ ] Vercel preview deployment + smoke tests
+- [x] Security headers and a nonce-based CSP, verified in a browser to not
+      break hydration or Server Actions
+- [x] Error boundary, not-found, loading skeletons, /api/health
+- [x] Playwright suite: public pages, auth guards, open-redirect refusal,
+      security headers, on desktop and mobile viewports
+- [x] `docs/deployment.md`
+- [ ] Accessibility audit pass
+- [ ] Vercel preview deployment + smoke tests (needs project link)
+- [ ] Cross-workspace isolation test (needs SUPABASE_SECRET_KEY)
 
 ## Blockers
 
-- Supabase project / Docker, Stripe test credentials, an AI provider key, Meta
-  app credentials and a Vercel project link are required for the end-to-end
-  Definition of Done. See `docs/implementation-plan.md`.
+All code-level work is done and green. What remains needs credentials or a
+human action:
+
+1. **SUPABASE_SECRET_KEY** — blocks the cron reminders, Stripe webhooks, the
+   public invoice lookup, and the cross-workspace isolation test. The E2E
+   journey provisions its own confirmed user the moment this exists.
+2. **Email confirmation for the test account** — blocks driving
+   login -> onboarding -> dashboard in a browser, so Stages 3-7 remain
+   "code complete and unit-tested" rather than "verified end to end".
+3. **Stripe test keys + 6 price ids** — blocks verifying a real checkout and a
+   real webhook activation.
+4. **Vercel project link** — blocks the preview deployment and its smoke tests.
+5. **Meta app credentials** — optional. The product works without them and the
+   Channels screen says so honestly.
