@@ -26,20 +26,12 @@ export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  // A fresh nonce per request. Reusing one across responses would let an
-  // attacker who learns it inject a script into a later page.
-  const nonce = crypto.randomUUID().replace(/-/g, "");
   const csp = buildContentSecurityPolicy({
-    nonce,
     supabaseUrl,
     isDevelopment: process.env.NODE_ENV !== "production",
   });
 
-  // Next reads the nonce back out of the request header and stamps it onto the
-  // inline bootstrap scripts it emits, so the policy needs no 'unsafe-inline'.
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
-  requestHeaders.set("content-security-policy", csp);
 
   function withSecurityHeaders(target: NextResponse): NextResponse {
     target.headers.set("content-security-policy", csp);

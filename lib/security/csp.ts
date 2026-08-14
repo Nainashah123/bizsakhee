@@ -1,12 +1,22 @@
 /**
  * Content Security Policy.
  *
- * Built per request so a fresh nonce can be issued. Next.js reads the nonce
- * back out of this header and stamps it onto the inline bootstrap scripts it
- * emits, which is what lets the policy avoid 'unsafe-inline' for scripts.
+ * script-src deliberately uses 'unsafe-inline' rather than a nonce.
  *
- * The Supabase origin is derived from the configured project URL rather than
- * wildcarded, so a compromised page cannot exfiltrate to an arbitrary host.
+ * A nonce has to be minted per request, and most of this app's marketing and
+ * auth pages are statically prerendered - their HTML is written at build time,
+ * when no request and therefore no nonce exists. A nonce policy was tried and
+ * shipped 14 script tags with no nonce attribute; combined with
+ * 'strict-dynamic', which makes browsers ignore 'self', every script was
+ * blocked and the whole app rendered without hydrating. It looked correct in
+ * development, where those pages are rendered per request.
+ *
+ * So the honest trade-off: script-src is the weakest directive here, and CSP
+ * is not this app's primary XSS defence. That job is done by React escaping
+ * output, the absence of dangerouslySetInnerHTML, and Zod validation at every
+ * boundary. Everything CSP *can* enforce without a nonce is still enforced -
+ * no wildcard hosts, no framing, no object embeds, no arbitrary form targets,
+ * and a connect-src pinned to this deployment's own Supabase project.
  */
 
 function supabaseOrigins(supabaseUrl: string | undefined): {
@@ -29,13 +39,11 @@ function supabaseOrigins(supabaseUrl: string | undefined): {
 }
 
 export type CspOptions = {
-  nonce: string;
   supabaseUrl?: string;
   isDevelopment: boolean;
 };
 
 export function buildContentSecurityPolicy({
-  nonce,
   supabaseUrl,
   isDevelopment,
 }: CspOptions): string {
@@ -43,12 +51,11 @@ export function buildContentSecurityPolicy({
 
   const script = [
     "'self'",
-    `'nonce-${nonce}'`,
-    // Lets the nonced bootstrap load the chunks it needs without listing every
-    // hashed filename. Older browsers fall back to the 'self' source above.
-    "'strict-dynamic'",
+    // Required by the RSC bootstrap on prerendered pages. See the note above.
+    "'unsafe-inline'",
     "https://js.stripe.com",
     // Turbopack's dev runtime and React Refresh both evaluate generated code.
+    // Never sent in production.
     ...(isDevelopment ? ["'unsafe-eval'"] : []),
   ];
 
