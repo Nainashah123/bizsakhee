@@ -30,7 +30,9 @@ export function AiDisclaimer() {
           It will not give financial, legal or medical advice, and neither
           should a draft you send. Point those questions to a professional.
         </li>
-        <li>Nothing here is sent to anyone. You copy it and send it yourself.</li>
+        <li>
+          Nothing here is sent to anyone. You copy it and send it yourself.
+        </li>
       </ul>
     </div>
   );

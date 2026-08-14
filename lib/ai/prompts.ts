@@ -185,6 +185,7 @@ export function contentPrompt(input: ContentInput): {
     `- Format for: ${AI_PLATFORM_LABELS[input.platform]}. ${PLATFORM_GUIDANCE[input.platform]}`,
     `- The goal of this post: ${AI_OBJECTIVE_LABELS[input.objective]}. ${OBJECTIVE_GUIDANCE[input.objective]}`,
     "- Hashtags must each start with # and contain no spaces or punctuation. Between five and ten of them, mixing broad and specific. No hashtag may claim something the seller did not tell you.",
+    "- Write the hashtags in the Latin alphabet (letters, digits and underscores only) even when the caption is in another language - that is what people actually search on, and accent or vowel marks are not valid inside a hashtag.",
     "- The WhatsApp version is for a broadcast list of people who already know her. Make it shorter, warmer and less hashtag-heavy than the caption.",
     "- The call to action must be something she can actually deliver from a phone: reply on WhatsApp, send a DM, comment, or visit her catalogue link.",
     "",

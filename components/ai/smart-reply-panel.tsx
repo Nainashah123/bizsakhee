@@ -76,7 +76,10 @@ export function SmartReplyPanel({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <MessageSquareQuote className="size-5 text-primary" aria-hidden="true" />
+          <MessageSquareQuote
+            className="size-5 text-primary"
+            aria-hidden="true"
+          />
           Smart reply
         </CardTitle>
         <CardDescription>

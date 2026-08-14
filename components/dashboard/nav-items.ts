@@ -51,6 +51,13 @@ export const NAV_ITEMS: NavItem[] = [
     capability: "products.write",
   },
   {
+    href: "/dashboard/ai",
+    label: "AI helper",
+    icon: Sparkles,
+    capability: "ai.use",
+    primary: true,
+  },
+  {
     href: "/dashboard/billing",
     label: "Billing",
     icon: CreditCard,
@@ -66,12 +73,6 @@ export const NAV_ITEMS: NavItem[] = [
 
 /** Modules landing in later stages, listed here so the plan stays visible. */
 export const PLANNED_NAV_ITEMS: NavItem[] = [
-  {
-    href: "/dashboard/ai",
-    label: "AI helper",
-    icon: Sparkles,
-    capability: "ai.use",
-  },
   {
     href: "/dashboard/team",
     label: "Team",

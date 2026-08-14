@@ -49,7 +49,12 @@ const OWN_PRODUCT = "";
 function SaveButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" variant="secondary" disabled={pending} aria-busy={pending}>
+    <Button
+      type="submit"
+      variant="secondary"
+      disabled={pending}
+      aria-busy={pending}
+    >
       {pending ? (
         <Loader2 className="animate-spin" aria-hidden="true" />
       ) : (
