@@ -117,6 +117,11 @@ test.describe("the core journey", () => {
     // Assert the row's link, not bare text: the WhatsApp action carries the
     // same name in its accessible label, and that node is not the one a
     // seller sees in the list.
+    // The dialog closing is the real signal that the Server Action finished.
+    // Asserting on the list first races the save: under load the submit button
+    // is still showing "Working..." when a short timeout expires.
+    await expect(page.getByRole("dialog")).toBeHidden({ timeout: 30_000 });
+
     await expect(
       page.getByRole("link", { name: "Meera Nair", exact: true }).first(),
     ).toBeVisible();
@@ -152,6 +157,7 @@ test.describe("the core journey", () => {
 
     await expect(page.getByRole("alert").first()).toContainText(
       /already|duplicate|exists/i,
+      { timeout: 30_000 },
     );
   });
 

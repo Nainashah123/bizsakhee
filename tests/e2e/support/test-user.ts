@@ -98,7 +98,14 @@ export async function provisionTestUser(
   };
 }
 
-/** Best-effort cleanup so the project does not fill with test accounts. */
+/**
+ * Best-effort cleanup.
+ *
+ * Deleting the user is not enough: workspaces.owner_id is ON DELETE RESTRICT,
+ * so a workspace outlives its owner and the leftovers pile up in the platform
+ * admin view - which is how this was noticed. Workspaces are removed first,
+ * which cascades to that tenant's contacts, products and orders.
+ */
 export async function deleteTestUser(email: string): Promise<void> {
   const { url, secret } = supabaseConfig();
   if (!url || !secret) return;
@@ -109,5 +116,8 @@ export async function deleteTestUser(email: string): Promise<void> {
 
   const { data } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
   const match = data?.users.find((user) => user.email === email);
-  if (match) await admin.auth.admin.deleteUser(match.id);
+  if (!match) return;
+
+  await admin.from("workspaces").delete().eq("owner_id", match.id);
+  await admin.auth.admin.deleteUser(match.id);
 }

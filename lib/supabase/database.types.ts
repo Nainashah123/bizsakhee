@@ -529,6 +529,14 @@ export type AuditLogRow = {
   created_at: string;
 };
 
+export type PlatformAdminRow = {
+  id: string;
+  user_id: string;
+  email: string;
+  note: string | null;
+  created_at: string;
+};
+
 export type OrderCounterRow = {
   workspace_id: string;
   last_number: number;
@@ -639,6 +647,9 @@ export type Database = {
       notifications: TableDef<NotificationRow, "workspace_id" | "kind" | "title">;
       audit_logs: TableDef<AuditLogRow, "action" | "entity_type">;
       order_counters: TableDef<OrderCounterRow, "workspace_id">;
+      // No policy grants a browser access to this table; it is readable only
+      // through the service role.
+      platform_admins: TableDef<PlatformAdminRow, "user_id" | "email">;
     };
     Views: Record<never, never>;
     Functions: {
