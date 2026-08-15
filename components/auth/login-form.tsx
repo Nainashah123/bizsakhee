@@ -8,6 +8,7 @@ import {
   FormAlert,
   SubmitButton,
 } from "@/components/auth/form-parts";
+import { PasswordInput } from "@/components/auth/password-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -83,14 +84,12 @@ export function LoginForm({
                 Forgot password?
               </Link>
             </div>
-            <Input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="current-password"
               required
               aria-describedby="password-error"
-              className="h-11"
             />
             <FieldError
               id="password-error"

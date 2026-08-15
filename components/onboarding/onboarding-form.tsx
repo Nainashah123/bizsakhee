@@ -23,6 +23,7 @@ import {
   completeOnboardingAction,
   type OnboardingState,
 } from "@/features/onboarding/actions";
+import { COUNTRIES, DEFAULT_COUNTRY } from "@/lib/geo/countries";
 import { SUPPORTED_CURRENCIES } from "@/lib/money";
 import {
   BUSINESS_CATEGORIES,
@@ -149,15 +150,19 @@ export function OnboardingForm({ defaultName }: { defaultName: string }) {
             <Input id="city" name="city" className="h-11" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="country">Country code</Label>
-            <Input
-              id="country"
-              name="country"
-              defaultValue="IN"
-              maxLength={2}
-              className="h-11 uppercase"
-              aria-describedby="country-error"
-            />
+            <Label htmlFor="country">Country</Label>
+            <Select name="country" defaultValue={DEFAULT_COUNTRY}>
+              <SelectTrigger id="country" className="h-11 w-full">
+                <SelectValue placeholder="Choose a country" />
+              </SelectTrigger>
+              <SelectContent>
+                {COUNTRIES.map((country) => (
+                  <SelectItem key={country.code} value={country.code}>
+                    {country.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FieldError
               id="country-error"
               messages={state.fieldErrors?.country}

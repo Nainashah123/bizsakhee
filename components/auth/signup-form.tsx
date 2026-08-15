@@ -7,6 +7,7 @@ import {
   FormAlert,
   SubmitButton,
 } from "@/components/auth/form-parts";
+import { PasswordInput } from "@/components/auth/password-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUpAction, type AuthState } from "@/features/auth/actions";
@@ -59,15 +60,13 @@ export function SignUpForm({ redirectTo }: { redirectTo: string }) {
 
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           autoComplete="new-password"
           required
           minLength={10}
           aria-describedby="password-hint password-error"
-          className="h-11"
         />
         <p id="password-hint" className="text-sm text-muted-foreground">
           At least 10 characters. A short phrase you will remember works well.

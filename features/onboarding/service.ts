@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { normalizePhone } from "@/lib/contacts/normalize";
+import { countryByCode } from "@/lib/geo/countries";
 import { logger } from "@/lib/logger";
 import { err, ok, type Result } from "@/lib/result";
 import type { Database } from "@/lib/supabase/database.types";
@@ -17,16 +18,6 @@ const DEFAULT_STAGES = [
   { name: "Order confirmed", is_won: true, is_lost: false },
   { name: "Not now", is_won: false, is_lost: true },
 ];
-
-const TIMEZONES: Record<string, string> = {
-  IN: "Asia/Kolkata",
-  AE: "Asia/Dubai",
-  SG: "Asia/Singapore",
-  GB: "Europe/London",
-  US: "America/New_York",
-  CA: "America/Toronto",
-  AU: "Australia/Sydney",
-};
 
 export type OnboardingResult = { workspaceId: string; slug: string };
 
@@ -62,7 +53,7 @@ export async function createFirstWorkspace(
       owner_id: userId,
       currency: input.currency,
       country: input.country,
-      timezone: TIMEZONES[input.country] ?? "Asia/Kolkata",
+      timezone: countryByCode(input.country).timezone,
     })
     .select("id, slug")
     .single();
